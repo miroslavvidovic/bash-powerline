@@ -3,6 +3,8 @@
 __powerline() {
 
     # Unicode symbols
+    readonly PS_DELIMITER=$'\uE0B0'
+    readonly PS_PC=$'\u2605'
     readonly PS_SYMBOL_DARWIN=''
     readonly PS_SYMBOL_LINUX='$'
     readonly PS_SYMBOL_OTHER='%'
@@ -12,23 +14,27 @@ __powerline() {
     readonly GIT_NEED_PULL_SYMBOL='⇣'
 
     # Solarized colorscheme
-    readonly FG_BASE03="\[$(tput setaf 8)\]"
-    readonly FG_BASE02="\[$(tput setaf 0)\]"
-    readonly FG_BASE01="\[$(tput setaf 10)\]"
-    readonly FG_BASE00="\[$(tput setaf 11)\]"
-    readonly FG_BASE0="\[$(tput setaf 12)\]"
-    readonly FG_BASE1="\[$(tput setaf 14)\]"
-    readonly FG_BASE2="\[$(tput setaf 7)\]"
-    readonly FG_BASE3="\[$(tput setaf 15)\]"
+    # readonly FG_BASE03="\[$(tput setaf 8)\]"
+    # readonly FG_BASE02="\[$(tput setaf 0)\]"
+    # readonly FG_BASE01="\[$(tput setaf 10)\]"
+    # readonly FG_BASE00="\[$(tput setaf 11)\]"
+    # readonly FG_BASE0="\[$(tput setaf 12)\]"
+    readonly FG_BASE1="\[$(tput setaf 91)\]"
+    readonly FG_PATH="\[$(tput setaf 255)\]"
+    readonly FG_PATH1="\[$(tput setaf 240)\]"
+    # readonly FG_BASE2="\[$(tput setaf 7)\]"
+    # readonly FG_BASE3="\[$(tput setaf 15)\]"
 
-    readonly BG_BASE03="\[$(tput setab 8)\]"
-    readonly BG_BASE02="\[$(tput setab 0)\]"
-    readonly BG_BASE01="\[$(tput setab 10)\]"
-    readonly BG_BASE00="\[$(tput setab 11)\]"
-    readonly BG_BASE0="\[$(tput setab 12)\]"
-    readonly BG_BASE1="\[$(tput setab 14)\]"
-    readonly BG_BASE2="\[$(tput setab 7)\]"
-    readonly BG_BASE3="\[$(tput setab 15)\]"
+    # readonly BG_BASE03="\[$(tput setab 8)\]"
+    # readonly BG_BASE02="\[$(tput setab 0)\]"
+    # readonly BG_BASE01="\[$(tput setab 10)\]"
+    # readonly BG_BASE00="\[$(tput setab 11)\]"
+    # readonly BG_BASE0="\[$(tput setab 12)\]"
+    readonly BG_BASE1="\[$(tput setab 91)\]"
+    readonly BG_PATH="\[$(tput setab 240)\]"
+    readonly BG_END="\[$(tput setab 0)\]"
+    # readonly BG_BASE2="\[$(tput setab 7)\]"
+    # readonly BG_BASE3="\[$(tput setab 15)\]"
 
     readonly FG_YELLOW="\[$(tput setaf 3)\]"
     readonly FG_ORANGE="\[$(tput setaf 9)\]"
@@ -53,19 +59,9 @@ __powerline() {
     readonly RESET="\[$(tput sgr0)\]"
     readonly BOLD="\[$(tput bold)\]"
 
-    # what OS?
-    case "$(uname)" in
-        Darwin)
-            readonly PS_SYMBOL=$PS_SYMBOL_DARWIN
-            ;;
-        Linux)
-            readonly PS_SYMBOL=$PS_SYMBOL_LINUX
-            ;;
-        *)
-            readonly PS_SYMBOL=$PS_SYMBOL_OTHER
-    esac
+    readonly PS_SYMBOL=$PS_SYMBOL_LINUX
 
-    __git_info() { 
+    __git_info() {
         [ -x "$(which git)" ] || return    # git not found
 
         local git_eng="env LANG=C git"   # force git output in English to make our work easier
@@ -91,16 +87,18 @@ __powerline() {
 
     ps1() {
         # Check the exit code of the previous command and display different
-        # colors in the prompt accordingly. 
+        # colors in the prompt accordingly.
         if [ $? -eq 0 ]; then
             local BG_EXIT="$BG_GREEN"
+            local FG_EXIT="$FG_GREEN"
         else
             local BG_EXIT="$BG_RED"
+            local FG_EXIT="$FG_RED"
         fi
-
-        PS1="$BG_BASE1$FG_BASE3 \w $RESET"
-        PS1+="$BG_BLUE$FG_BASE3$(__git_info)$RESET"
-        PS1+="$BG_EXIT$FG_BASE3 $PS_SYMBOL $RESET "
+        PS1="$BG_BASE1$FG_BASE3 $PS_PC $BG_PATH$FG_BASE1$PS_DELIMITER $RESET"
+        PS1+="$BG_PATH$FG_PATH\w $BG_BASE1$FG_PATH1$PS_DELIMITER $RESET"
+        PS1+="$BG_BASE1$FG_BASE3$(__git_info) $BG_EXIT$FG_BASE1$PS_DELIMITER $RESET"
+        PS1+="$BG_EXIT$FG_BASE3$PS_SYMBOL $RESET$FG_EXIT$PS_DELIMITER$RESET "
     }
 
     PROMPT_COMMAND=ps1
