@@ -2,9 +2,6 @@
 
 Powerline for Bash in pure Bash script. 
 
-> ![bash-powerline](https://raw.github.com/riobard/bash-powerline/master/screenshots/solarized-light-source-code-pro.png)
-> ![bash-powerline](https://raw.github.com/riobard/bash-powerline/master/screenshots/solarized-dark-monaco.png)
-
 ## Features
 
 * Git branch: display current git branch name, or short SHA1 hash when the head
@@ -14,7 +11,6 @@ Powerline for Bash in pure Bash script.
 * Git branch: display "⇣" symbol and the difference in the number of commits when the current branch is behind of remote (see screenshot)
 * Color code for the previously failed command
 * Fast execution (no noticable delay)
-* Powerline fonts
 
 ## Installation
 
