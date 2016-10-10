@@ -3,55 +3,31 @@
 __powerline() {
 
     # Unicode symbols
-    readonly PS_DELIMITER=$'\uE0B0'
-    readonly PS_PC=$'\u2605'
-    readonly PS_SYMBOL_DARWIN=''
+    # Symbols http://unicode-table.com/en/
+    readonly PS_DELIMITER=''
+    readonly PS_STAR='★'
+    readonly PS_SUDO='⦿'
     readonly PS_SYMBOL_LINUX='$'
-    readonly PS_SYMBOL_OTHER='%'
-    readonly GIT_BRANCH_SYMBOL='⑂ '
+    readonly GIT_BRANCH_SYMBOL='⎇  '
     readonly GIT_BRANCH_CHANGED_SYMBOL='+'
     readonly GIT_NEED_PUSH_SYMBOL='⇡'
     readonly GIT_NEED_PULL_SYMBOL='⇣'
 
-    # Solarized colorscheme
-    # readonly FG_BASE03="\[$(tput setaf 8)\]"
-    # readonly FG_BASE02="\[$(tput setaf 0)\]"
-    # readonly FG_BASE01="\[$(tput setaf 10)\]"
-    # readonly FG_BASE00="\[$(tput setaf 11)\]"
-    # readonly FG_BASE0="\[$(tput setaf 12)\]"
-    readonly FG_BASE1="\[$(tput setaf 91)\]"
-    readonly FG_PATH="\[$(tput setaf 255)\]"
-    readonly FG_PATH1="\[$(tput setaf 240)\]"
-    # readonly FG_BASE2="\[$(tput setaf 7)\]"
-    # readonly FG_BASE3="\[$(tput setaf 15)\]"
+    # Colors
+    # For colors check a 256 terminal colors cheatsheet
+    # Violet bg and fg
+    readonly BG_VIOLET="\[$(tput setab 91)\]"
+    readonly FG_VIOLET="\[$(tput setaf 91)\]"
+    # White
+    readonly FG_WHITE="\[$(tput setaf 255)\]"
+    # Gray
+    readonly FG_GRAY="\[$(tput setaf 240)\]"
+    readonly BG_GRAY="\[$(tput setab 240)\]"
 
-    # readonly BG_BASE03="\[$(tput setab 8)\]"
-    # readonly BG_BASE02="\[$(tput setab 0)\]"
-    # readonly BG_BASE01="\[$(tput setab 10)\]"
-    # readonly BG_BASE00="\[$(tput setab 11)\]"
-    # readonly BG_BASE0="\[$(tput setab 12)\]"
-    readonly BG_BASE1="\[$(tput setab 91)\]"
-    readonly BG_PATH="\[$(tput setab 240)\]"
-    readonly BG_END="\[$(tput setab 0)\]"
-    # readonly BG_BASE2="\[$(tput setab 7)\]"
-    # readonly BG_BASE3="\[$(tput setab 15)\]"
-
-    readonly FG_YELLOW="\[$(tput setaf 3)\]"
-    readonly FG_ORANGE="\[$(tput setaf 9)\]"
     readonly FG_RED="\[$(tput setaf 1)\]"
-    readonly FG_MAGENTA="\[$(tput setaf 5)\]"
-    readonly FG_VIOLET="\[$(tput setaf 13)\]"
-    readonly FG_BLUE="\[$(tput setaf 4)\]"
-    readonly FG_CYAN="\[$(tput setaf 6)\]"
     readonly FG_GREEN="\[$(tput setaf 2)\]"
 
-    readonly BG_YELLOW="\[$(tput setab 3)\]"
-    readonly BG_ORANGE="\[$(tput setab 9)\]"
     readonly BG_RED="\[$(tput setab 1)\]"
-    readonly BG_MAGENTA="\[$(tput setab 5)\]"
-    readonly BG_VIOLET="\[$(tput setab 13)\]"
-    readonly BG_BLUE="\[$(tput setab 4)\]"
-    readonly BG_CYAN="\[$(tput setab 6)\]"
     readonly BG_GREEN="\[$(tput setab 2)\]"
 
     readonly DIM="\[$(tput dim)\]"
@@ -86,6 +62,17 @@ __powerline() {
     }
 
     ps1() {
+        # Preset colors
+        local fg_base="$FG_WHITE"
+
+        local delimit="$FG_VIOLET"
+
+        local bg_path="$BG_GRAY"
+        local fg_path="$FG_WHITE"
+
+        local bg_git="$BG_VIOLET"
+        local fg_git="$FG_WHITE"
+
         # Check the exit code of the previous command and display different
         # colors in the prompt accordingly.
         if [ $? -eq 0 ]; then
@@ -95,10 +82,25 @@ __powerline() {
             local BG_EXIT="$BG_RED"
             local FG_EXIT="$FG_RED"
         fi
-        PS1="$BG_BASE1$FG_BASE3 $PS_PC $BG_PATH$FG_BASE1$PS_DELIMITER $RESET"
-        PS1+="$BG_PATH$FG_PATH\w $BG_BASE1$FG_PATH1$PS_DELIMITER $RESET"
-        PS1+="$BG_BASE1$FG_BASE3$(__git_info) $BG_EXIT$FG_BASE1$PS_DELIMITER $RESET"
-        PS1+="$BG_EXIT$FG_BASE3$PS_SYMBOL $RESET$FG_EXIT$PS_DELIMITER$RESET "
+
+        if [ "$(whoami)" == "root" ] ; then
+            local PS_USER="$PS_SUDO"
+            local bg_base="$BG_RED"
+            local FG_BASE="$FG_RED"
+        else
+            local PS_USER="$PS_STAR"
+            local bg_base="$BG_VIOLET"
+            local FG_BASE="$FG_VIOLET"
+        fi
+
+        # Base with the start and the delimiter
+        PS1="$bg_base$fg_base $PS_USER $bg_path$delimit$PS_DELIMITER $RESET"
+        # Path section
+        PS1+="$bg_path$fg_path\W $RESET"
+        # Git section
+        PS1+="$bg_git$fg_git$(__git_info)$RESET"
+        # Endign section
+        PS1+="$BG_EXIT$fg_base $PS_SYMBOL $RESET$FG_EXIT$PS_DELIMITER$RESET "
     }
 
     PROMPT_COMMAND=ps1
