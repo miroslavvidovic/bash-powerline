@@ -14,19 +14,15 @@ __powerline() {
     readonly GIT_NEED_PULL_SYMBOL='⇣'
 
     # Colors
-    # For colors check a 256 terminal colors cheatsheet
-    # Violet bg and fg
+    # For colors check a 256 terminal colors cheat sheet
     readonly BG_VIOLET="\[$(tput setab 91)\]"
     readonly FG_VIOLET="\[$(tput setaf 91)\]"
-    # White
     readonly FG_WHITE="\[$(tput setaf 255)\]"
-    # Gray
-    readonly FG_GRAY="\[$(tput setaf 240)\]"
-    readonly BG_GRAY="\[$(tput setab 240)\]"
+    readonly FG_GREY="\[$(tput setaf 240)\]"
+    readonly BG_GREY="\[$(tput setab 240)\]"
 
     readonly FG_RED="\[$(tput setaf 1)\]"
     readonly FG_GREEN="\[$(tput setaf 2)\]"
-
     readonly BG_RED="\[$(tput setab 1)\]"
     readonly BG_GREEN="\[$(tput setab 2)\]"
 
@@ -39,8 +35,8 @@ __powerline() {
 
     __git_info() {
         [ -x "$(which git)" ] || return    # git not found
-
-        local git_eng="env LANG=C git"   # force git output in English to make our work easier
+        # force git output in English to make our work easier
+        local git_eng="env LANG=C git"
         # get current branch name or short SHA1 hash for detached head
         local branch="$($git_eng symbolic-ref --short HEAD 2>/dev/null || $git_eng describe --tags --always 2>/dev/null)"
         [ -n "$branch" ] || return  # git branch not found
@@ -62,14 +58,11 @@ __powerline() {
     }
 
     ps1() {
-        # Preset colors
+        # Set the colors for ps1 segments
         local fg_base="$FG_WHITE"
-
         local delimit="$FG_VIOLET"
-
-        local bg_path="$BG_GRAY"
+        local bg_path="$BG_GREY"
         local fg_path="$FG_WHITE"
-
         local bg_git="$BG_VIOLET"
         local fg_git="$FG_WHITE"
 
@@ -99,7 +92,7 @@ __powerline() {
         PS1+="$bg_path$fg_path\W $RESET"
         # Git section
         PS1+="$bg_git$fg_git$(__git_info)$RESET"
-        # Endign section
+        # Ending section
         PS1+="$BG_EXIT$fg_base $PS_SYMBOL $RESET$FG_EXIT$PS_DELIMITER$RESET "
     }
 
