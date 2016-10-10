@@ -11,6 +11,7 @@ Powerline for Bash in pure Bash script.
 * Git branch: display "⇣" symbol and the difference in the number of commits when the current branch is behind of remote (see screenshot)
 * Color code for the previously failed command
 * Fast execution (no noticable delay)
+* Display different symbol for the root user 
 
 ## Installation
 
