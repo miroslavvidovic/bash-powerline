@@ -57,15 +57,9 @@ powerline() {
   }
 
   ps1() {
-    # Set the colors for ps1 segments
-    local fg_base="$FG_WHITE"
-    local bg_path="$BG_GREY"
-    local fg_path="$FG_WHITE"
-    local bg_git="$BG_VIOLET"
-    local fg_git="$FG_WHITE"
-    
     # Check the exit code of the previous command and display different
     # colors in the prompt accordingly.
+    # must be first in this function to work
     if [ $? -eq 0 ]; then
       local BG_EXIT="$BG_GREEN"
       local FG_EXIT="$FG_GREEN"
@@ -73,6 +67,13 @@ powerline() {
       local BG_EXIT="$BG_RED"
       local FG_EXIT="$FG_RED"
     fi
+
+    # Set the colors for ps1 segments
+    local fg_base="$FG_WHITE"
+    local bg_path="$BG_GREY"
+    local fg_path="$FG_WHITE"
+    local bg_git="$BG_VIOLET"
+    local fg_git="$FG_WHITE"
 
     # Check if the user is root
     if [ "$(whoami)" == "root" ] ; then
