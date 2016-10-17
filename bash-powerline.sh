@@ -5,15 +5,13 @@ powerline() {
   # Symbols http://unicode-table.com/en/
   readonly PS_DELIMITER=''
   readonly PS_STAR='★'
-  readonly PS_SUDO='⦿'
-  readonly PS_SYMBOL_LINUX='$'
+  readonly PS_SYMBOL='$'
   readonly GIT_BRANCH_SYMBOL='⎇  '
   readonly GIT_BRANCH_CHANGED_SYMBOL='+'
   readonly GIT_NEED_PUSH_SYMBOL='↑'
   readonly GIT_NEED_PULL_SYMBOL='↓'
-  
+
   # Colors
-  # For colors check a 256 terminal colors cheat sheet
   readonly BG_VIOLET="\[$(tput setab 91)\]"
   readonly FG_VIOLET="\[$(tput setaf 91)\]"
   readonly FG_WHITE="\[$(tput setaf 255)\]"
@@ -34,8 +32,6 @@ powerline() {
   readonly RESET="\[$(tput sgr0)\]"
   readonly BOLD="\[$(tput bold)\]"
   
-  readonly PS_SYMBOL=$PS_SYMBOL_LINUX
-
   git_info() {
     [ -x "$(which git)" ] || return    # git not found
     # force git output in English to make our work easier
@@ -51,13 +47,12 @@ powerline() {
   
     # how many commits local branch is ahead/behind of remote?
     local stat="$($git_eng status --porcelain --branch | grep '^##' | grep -o '\[.\+\]$')"
-    local aheadN="$(echo $stat | grep -o 'ahead [[:digit:]]\+' | grep -o '[[:digit:]]\+')"
-    local behindN="$(echo $stat | grep -o 'behind [[:digit:]]\+' | grep -o '[[:digit:]]\+')"
+    local aheadN="$(echo "$stat" | grep -o 'ahead [[:digit:]]\+' | grep -o '[[:digit:]]\+')"
+    local behindN="$(echo "$stat" | grep -o 'behind [[:digit:]]\+' | grep -o '[[:digit:]]\+')"
     [ -n "$aheadN" ] && marks+=" $GIT_NEED_PUSH_SYMBOL$aheadN"
     [ -n "$behindN" ] && marks+=" $GIT_NEED_PULL_SYMBOL$behindN"
   
     # Check if a branch is local only and show L
-    # TODO: Refactoring for easier maintenance of git_info
     if [[ $($git_eng remote) ]]; then
       # repo has remote it is not local only
       local no_remote=""
@@ -67,7 +62,7 @@ powerline() {
     fi
 
     # print the git branch segment without a trailing newline
-    printf "($no_remote $GIT_BRANCH_SYMBOL$branch$marks)"
+    echo "($no_remote $GIT_BRANCH_SYMBOL$branch$marks)"
   }
 
   ps1() {
@@ -75,40 +70,46 @@ powerline() {
     # colors in the prompt accordingly.
     # must be first in this function to work
     if [ $? -eq 0 ]; then
-      local BG_EXIT="$BG_GREEN"
-      local FG_EXIT="$FG_GREEN"
+      local bg_exit="$BG_GREEN"
+      local fg_exit="$FG_GREEN"
     else
-      local BG_EXIT="$BG_RED"
-      local FG_EXIT="$FG_RED"
+      local bg_exit="$BG_RED"
+      local fg_exit="$FG_RED"
     fi
 
     # Set the colors for ps1 segments
+    # base forground 
     local fg_base="$FG_WHITE"
-    local bg_path="$BG_GREY"
-    local fg_path="$FG_WHITE"
-    local bg_git="$BG_VIOLET"
-    local fg_git="$FG_WHITE"
+    # username
+    local fg_user="$BOLD$FG_LIGHT_GREEN"
+    # @ 
+    local fg_et="$FG_VIOLET"
+    # host
+    local fg_host="$FG_LIGHT_GREEN"
+    # path
+    local fg_path="$FG_BLUE"
+    # git
+    local fg_git="$FG_LIGHT_BLUE"
 
-    # Check if the user is root
+    # Check if the user is root and set the starting section color
     if [ "$(whoami)" == "root" ] ; then
-      local PS_USER="$PS_SUDO"
       local bg_base="$BG_RED"
       local delimit="$FG_RED"
     else
-      local PS_USER="$PS_STAR"
       local bg_base="$BG_VIOLET"
       local delimit="$FG_VIOLET"
     fi
     
     # Base with the start and the delimiter
-    PS1="$bg_base$fg_base $PS_USER $RESET$delimit$PS_DELIMITER $RESET"
-    PS1+="$BOLD$FG_LIGHT_GREEN\u$FG_VIOLET@$FG_LIGHT_GREEN\h $RESET"
+    PS1="$bg_base$fg_base $PS_STAR $RESET$delimit$PS_DELIMITER $RESET"
+    # Username and host
+    PS1+="$fg_user\u$fg_et@$fg_host\h $RESET"
     # Path section
-    PS1+="$FG_BLUE\w $RESET"
+    PS1+="$fg_path\w $RESET"
     # Git section
-    PS1+="$FG_LIGHT_BLUE$(git_info) $RESET"
+    PS1+="$fg_git$(git_info) $RESET"
     # Ending section
-    PS1+="$BG_EXIT$fg_base $PS_SYMBOL $RESET$FG_EXIT$PS_DELIMITER$RESET "
+    PS1+="$bg_exit$fg_base $PS_SYMBOL $RESET$fg_exit$PS_DELIMITER$RESET "
   }
 
   PROMPT_COMMAND=ps1
