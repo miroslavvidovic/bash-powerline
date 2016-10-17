@@ -9,8 +9,8 @@ powerline() {
   readonly PS_SYMBOL_LINUX='$'
   readonly GIT_BRANCH_SYMBOL='⎇  '
   readonly GIT_BRANCH_CHANGED_SYMBOL='+'
-  readonly GIT_NEED_PUSH_SYMBOL='⇡'
-  readonly GIT_NEED_PULL_SYMBOL='⇣'
+  readonly GIT_NEED_PUSH_SYMBOL='↑'
+  readonly GIT_NEED_PULL_SYMBOL='↓'
   
   # Colors
   # For colors check a 256 terminal colors cheat sheet
@@ -24,6 +24,10 @@ powerline() {
   readonly FG_GREEN="\[$(tput setaf 2)\]"
   readonly BG_RED="\[$(tput setab 1)\]"
   readonly BG_GREEN="\[$(tput setab 2)\]"
+  
+  readonly FG_BLUE="\[$(tput setaf 25)\]"
+  readonly FG_LIGHT_BLUE="\[$(tput setaf 44)\]"
+  readonly FG_LIGHT_GREEN="\[$(tput setaf 40)\]"
   
   readonly DIM="\[$(tput dim)\]"
   readonly REVERSE="\[$(tput rev)\]"
@@ -63,7 +67,7 @@ powerline() {
     fi
 
     # print the git branch segment without a trailing newline
-    printf " $GIT_BRANCH_SYMBOL$branch$marks $no_remote "
+    printf "($no_remote $GIT_BRANCH_SYMBOL$branch$marks)"
   }
 
   ps1() {
@@ -97,11 +101,12 @@ powerline() {
     fi
     
     # Base with the start and the delimiter
-    PS1="$bg_base$fg_base $PS_USER $bg_path$delimit$PS_DELIMITER $RESET"
+    PS1="$bg_base$fg_base $PS_USER $RESET$delimit$PS_DELIMITER $RESET"
+    PS1+="$BOLD$FG_LIGHT_GREEN\u$FG_VIOLET@$FG_LIGHT_GREEN\h $RESET"
     # Path section
-    PS1+="$bg_path$fg_path\W $RESET"
+    PS1+="$FG_BLUE\w $RESET"
     # Git section
-    PS1+="$bg_git$fg_git$(git_info)$RESET"
+    PS1+="$FG_LIGHT_BLUE$(git_info) $RESET"
     # Ending section
     PS1+="$BG_EXIT$fg_base $PS_SYMBOL $RESET$FG_EXIT$PS_DELIMITER$RESET "
   }
