@@ -52,14 +52,9 @@ powerline() {
     [ -n "$aheadN" ] && marks+=" $GIT_NEED_PUSH_SYMBOL$aheadN"
     [ -n "$behindN" ] && marks+=" $GIT_NEED_PULL_SYMBOL$behindN"
   
-    # Check if a branch is local only and show L
-    if [[ $($git_eng remote) ]]; then
-      # repo has remote it is not local only
-      local no_remote=""
-    else
-      # no remotes local only repo
-      local no_remote="L"
-    fi
+    # Check if the brach is local only
+    local local_repo="$($git_eng remote)"
+    [ -z "$local_repo" ] && no_remote="L"
 
     # print the git branch segment without a trailing newline
     echo "($no_remote $GIT_BRANCH_SYMBOL$branch$marks)"
