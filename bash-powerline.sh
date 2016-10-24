@@ -23,7 +23,7 @@ powerline() {
   readonly BG_RED="\[$(tput setab 1)\]"
   readonly BG_GREEN="\[$(tput setab 2)\]"
   
-  readonly FG_BLUE="\[$(tput setaf 25)\]"
+  readonly FG_BLUE="\[$(tput setaf 32)\]"
   readonly FG_LIGHT_BLUE="\[$(tput setaf 44)\]"
   readonly FG_LIGHT_GREEN="\[$(tput setaf 40)\]"
   
