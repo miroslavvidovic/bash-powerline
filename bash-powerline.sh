@@ -3,29 +3,21 @@
 powerline() {
   # Unicode symbols
   # Symbols http://unicode-table.com/en/
-  readonly PS_DELIMITER=''
-  readonly PS_STAR='★'
-  readonly PS_SYMBOL='$'
+  readonly PS_ARROW='➡'
   readonly GIT_BRANCH_SYMBOL='⎇  '
   readonly GIT_BRANCH_CHANGED_SYMBOL='+'
   readonly GIT_NEED_PUSH_SYMBOL='↑'
   readonly GIT_NEED_PULL_SYMBOL='↓'
 
   # Colors
-  readonly BG_VIOLET="\[$(tput setab 91)\]"
-  readonly FG_VIOLET="\[$(tput setaf 91)\]"
-  readonly FG_WHITE="\[$(tput setaf 255)\]"
-  readonly FG_GREY="\[$(tput setaf 240)\]"
-  readonly BG_GREY="\[$(tput setab 240)\]"
-  
   readonly FG_RED="\[$(tput setaf 1)\]"
   readonly FG_GREEN="\[$(tput setaf 2)\]"
   readonly BG_RED="\[$(tput setab 1)\]"
   readonly BG_GREEN="\[$(tput setab 2)\]"
-  
-  readonly FG_BLUE="\[$(tput setaf 32)\]"
-  readonly FG_LIGHT_BLUE="\[$(tput setaf 44)\]"
-  readonly FG_LIGHT_GREEN="\[$(tput setaf 40)\]"
+  readonly FG_DARKRED="\[$(tput setaf 9)\]"
+  readonly FG_BLUE="\[$(tput setaf 4)\]"
+  readonly FG_LIGHT_BLUE="\[$(tput setaf 6)\]"
+  readonly FG_LIGHT_GREEN="\[$(tput setaf 10)\]"
   
   readonly DIM="\[$(tput dim)\]"
   readonly REVERSE="\[$(tput rev)\]"
@@ -54,10 +46,10 @@ powerline() {
   
     # Check if the brach is local only
     local local_repo="$($git_eng remote)"
-    [ -z "$local_repo" ] && no_remote="L"
+    [ -z "$local_repo" ] && no_remote="L "
 
     # print the git branch segment without a trailing newline
-    echo "($no_remote $GIT_BRANCH_SYMBOL$branch$marks)"
+    echo "($no_remote$GIT_BRANCH_SYMBOL$branch$marks)"
   }
 
   ps1() {
@@ -65,48 +57,39 @@ powerline() {
     # colors in the prompt accordingly.
     # must be first in this function to work
     if [ $? -eq 0 ]; then
-      local bg_exit="$BG_GREEN"
       local fg_exit="$FG_GREEN"
     else
-      local bg_exit="$BG_RED"
       local fg_exit="$FG_RED"
     fi
 
     # Set the colors for ps1 segments
-    # base forground 
-    local fg_base="$FG_WHITE"
-    # username
-    local fg_user="$BOLD$FG_LIGHT_GREEN"
     # @ 
-    local fg_et="$FG_VIOLET"
+    local fg_et="$FG_DARKRED"
     # host
     local fg_host="$FG_LIGHT_GREEN"
     # path
-    local fg_path="$FG_BLUE"
+    local fg_path="$FG_DARKRED"
     # git
     local fg_git="$FG_LIGHT_BLUE"
 
+    local ps_symbol="$PS_ARROW"
     # Check if the user is root and set the starting section color
     if [ "$(whoami)" == "root" ] ; then
-      local bg_base="$BG_RED"
-      local delimit="$FG_RED"
+      local fg_user="$BOLD$FG_RED"
     else
-      local bg_base="$BG_VIOLET"
-      local delimit="$FG_VIOLET"
+      local fg_user="$BOLD$FG_LIGHT_GREEN"
     fi
     
     # Base with the start and the delimiter
-    PS1="$bg_base$fg_base $PS_STAR $RESET$delimit$PS_DELIMITER $RESET"
     # Username and host
-    PS1+="$fg_user\u$fg_et@$fg_host\h $RESET"
+    PS1="$fg_user\u$fg_et@$fg_host\h $RESET"
     # Path section
     PS1+="$fg_path\w $RESET"
     # Git section
     PS1+="$fg_git$(git_info) $RESET"
     # Ending section
-    PS1+="$bg_exit$fg_base $PS_SYMBOL $RESET$fg_exit$PS_DELIMITER$RESET "
+    PS1+="$fg_exit$ps_symbol$RESET "
   }
-
   PROMPT_COMMAND=ps1
 }
 
