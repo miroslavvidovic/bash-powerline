@@ -1,7 +1,9 @@
 # Info
 
 Informative prompt in pure Bash script. 
-![](https://github.com/miroslavvidovic/bash-powerline/screenshots/bash-prompt1.png)
+
+![screenshot1](screenshots/bash-prompt1.png)
+![screenshot2](screenshots/bash-prompt2.png)
 
 ## Features
 
@@ -13,7 +15,7 @@ Informative prompt in pure Bash script.
 * Display "L" for local repositories
 * Color code for the previously failed command
 * Display different color for the root user 
-* Fast execution (no noticable delay)
+* Fast execution (no noticeable delay)
 
 ## Installation
 
@@ -24,12 +26,6 @@ And source it in your `.bashrc`
     source ~/.bash-powerline.sh
 
 ## See also
-* [powerline](https://github.com/Lokaltog/powerline): Unified Powerline
-  written in Python. This is the future of all Powerline derivatives. 
-* [vim-powerline](https://github.com/Lokaltog/vim-powerline): Powerline in Vim
-  writtien in pure Vimscript. Deprecated.
-* [tmux-powerline](https://github.com/erikw/tmux-powerline): Powerline for Tmux
-  written in Bash script. Deprecated.
-* [powerline-shell](https://github.com/milkbikis/powerline-shell): Powerline for
-  Bash/Zsh/Fish implemented in Python. Might be merged into the unified
-  Powerline. 
+
+* [bash-git-prompt](https://github.com/magicmonty/bash-git-prompt): An informative and fancy bash prompt for Git users 
+* [oh-my-zsh](https://github.com/robbyrussell/oh-my-zsh): zsh framework with lots of themes and plugins
