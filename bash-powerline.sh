@@ -49,7 +49,7 @@ powerline() {
     [ -z "$local_repo" ] && no_remote="L "
 
     # print the git branch segment without a trailing newline
-    echo "($no_remote$GIT_BRANCH_SYMBOL$branch$marks)"
+    echo "($no_remote$GIT_BRANCH_SYMBOL$branch$marks) "
   }
 
   ps1() {
@@ -71,8 +71,9 @@ powerline() {
     local fg_path="$FG_DARKRED"
     # git
     local fg_git="$FG_LIGHT_BLUE"
-
+    # arrow symbol
     local ps_symbol="$PS_ARROW"
+
     # Check if the user is root and set the starting section color
     if [ "$(whoami)" == "root" ] ; then
       local fg_user="$BOLD$FG_RED"
@@ -80,13 +81,24 @@ powerline() {
       local fg_user="$BOLD$FG_LIGHT_GREEN"
     fi
     
+    # Get Virtual Env (python virtualenv)
+    if [[ $VIRTUAL_ENV != "" ]] ; then
+      # Strip out the path and just leave the env name
+      venv="$FG_BLUE(${VIRTUAL_ENV##*/}) "
+    else
+      # In case you don't have one activated
+      venv=''
+    fi
+
     # Base with the start and the delimiter
     # Username and host
     PS1="$fg_user\u$fg_et@$fg_host\h $RESET"
     # Path section
     PS1+="$fg_path\w $RESET"
     # Git section
-    PS1+="$fg_git$(git_info) $RESET"
+    PS1+="$fg_git$(git_info)$RESET"
+    # Python virtualenv section
+    PS1+="$venv$RESET"
     # Ending section
     PS1+="$fg_exit$ps_symbol$RESET "
   }
