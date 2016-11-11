@@ -13,6 +13,7 @@ Informative prompt in pure Bash script.
 * Git branch: display "↑" symbol and the difference in the number of commits when the current branch is ahead of remote (see screenshot)
 * Git branch: display "↓" symbol and the difference in the number of commits when the current branch is behind of remote (see screenshot)
 * Display "L" for local repositories
+* Display python virtualenv
 * Color code for the previously failed command
 * Display different color for the root user 
 * Fast execution (no noticeable delay)
