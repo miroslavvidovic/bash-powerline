@@ -75,10 +75,17 @@ powerline() {
     local ps_symbol="$PS_ARROW"
 
     # Check if the user is root and set the starting section color
-    if [ "$(whoami)" == "root" ] ; then
+    if [[ "$(whoami)" == "root" ]] ; then
       local fg_user="$BOLD$FG_RED"
     else
       local fg_user="$BOLD$FG_LIGHT_GREEN"
+    fi
+
+    # # Check for ssh
+    if [[ -n "$SSH_CLIENT" ]] || [[ -n "$SSH_TTY" ]]; then
+      ssh="$BOLD$FG_BLUE"
+    else
+      ssh=""
     fi
     
     # Get Virtual Env (python virtualenv)
@@ -92,7 +99,7 @@ powerline() {
 
     # Base with the start and the delimiter
     # Username and host
-    PS1="$fg_user\u$fg_et@$fg_host\h $RESET"
+    PS1="$ssh$fg_user\u$fg_et@$fg_host\h $RESET"
     # Path section
     PS1+="$fg_path\w $RESET"
     # Git section
