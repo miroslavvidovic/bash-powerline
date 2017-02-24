@@ -16,6 +16,7 @@ Informative prompt in pure Bash script.
 * Display python virtualenv
 * Color code for the previously failed command
 * Display different color for the root user 
+* Display "(ssh)" for ssh sessions
 * Fast execution (no noticeable delay)
 
 ## Installation
