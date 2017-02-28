@@ -83,7 +83,7 @@ powerline() {
 
     # # Check for ssh
     if [[ -n "$SSH_CLIENT" ]] || [[ -n "$SSH_TTY" ]]; then
-      ssh="$BOLD$FG_BLUE"
+      ssh="$BOLD$FG_BLUE(ssh)"
     else
       ssh=""
     fi
